@@ -20,7 +20,6 @@ public final class AppConfig {
             @SuppressWarnings("unchecked")
             Map<String, Object> properties = (Map<String, Object>) data.get("bot");
             TOKEN = removeBrace((String) properties.get("token"));
-            System.out.println(TOKEN);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
