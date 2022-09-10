@@ -9,7 +9,7 @@ import net.dv8tion.jda.api.utils.cache.CacheFlag;
 
 import javax.security.auth.login.LoginException;
 
-public class BotConfig {
+public final class BotConfig {
 
     private BotConfig() {}
 
