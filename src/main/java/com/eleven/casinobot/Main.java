@@ -8,7 +8,8 @@ import javax.security.auth.login.LoginException;
 
 public class Main {
 
-    public static void main(String[] args) throws LoginException, InterruptedException {
+    public static void main(String[] args) throws LoginException,
+            InterruptedException {
         DatabaseConfig.initalizeDatabase();
         JDA jda = BotConfig.initBot();
         jda.awaitReady();

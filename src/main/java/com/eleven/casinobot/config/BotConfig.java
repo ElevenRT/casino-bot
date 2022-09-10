@@ -9,10 +9,21 @@ import net.dv8tion.jda.api.utils.cache.CacheFlag;
 
 import javax.security.auth.login.LoginException;
 
+/**
+ * A class for setting up the bot Cache.
+ *
+ * @author iqpizza6349
+ * @version 1.0.0
+ */
 public final class BotConfig {
 
     private BotConfig() {}
 
+    /**
+     * initialize setting bots cache
+     * @return running bot source
+     * @throws LoginException when bot token is invalid
+     */
     public static JDA initBot() throws LoginException {
         JDABuilder builder = JDABuilder.createDefault(AppConfig.getToken());
 
@@ -23,5 +34,4 @@ public final class BotConfig {
         builder.addEventListeners(new ReadyListener());
         return builder.build();
     }
-
 }

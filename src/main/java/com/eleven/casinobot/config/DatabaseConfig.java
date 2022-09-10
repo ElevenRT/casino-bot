@@ -1,49 +1,66 @@
 package com.eleven.casinobot.config;
 
+import com.eleven.casinobot.database.pool.ConnectionPool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
+/**
+ * Initialize the table in the database and verify that it is functioning properly.
+ *
+ * @author iqpizza6349
+ * @version 1.0.0
+ */
 public final class DatabaseConfig {
 
     private static final Logger log = LoggerFactory.getLogger(DatabaseConfig.class);
+    private static final ConnectionPool CONNECTION_POOL = ConnectionPool.getInstance(1, 4);
 
     private DatabaseConfig() {}
 
+    /**
+     * drop and create table in database. <br>
+     * You must use application.yml. ddl must be true
+     */
     public static void initalizeDatabase() {
         if (!AppConfig.isUSE_DDL()) {
             return;
         }
 
-        try {
-            runDDL();
-        } catch (ClassNotFoundException e) {
-            log.error("cannot load class: org.postgresql.Driver");
-            throw new RuntimeException(e);
-        }
+        runDDL();
     }
 
-    private static void runDDL() throws ClassNotFoundException {
-        Class.forName("org.postgresql.Driver");
-        try (final Connection connection
-                     = DriverManager.getConnection(
-                             AppConfig.getDbUrl(), AppConfig.getDbUsername(), AppConfig.getDbPassword())
-        ) {
-            try (final PreparedStatement statement = connection.prepareStatement(parseDDL())) {
+    /**
+     * run script schema.sql
+     */
+    private static void runDDL() {
+        Connection connection = null;
+        try {
+            connection = CONNECTION_POOL.getConnection();
+            try (final PreparedStatement statement = connection
+                    .prepareStatement(parseDDL())) {
                 statement.execute();
             }
         } catch (SQLException e) {
-            log.error(e.getSQLState());
-            log.error(String.valueOf(e.getErrorCode()));
+            logDatabaseError(log, e);
             throw new RuntimeException(e);
+        } finally {
+            if (connection != null) {
+                CONNECTION_POOL.releaseConnection(connection);
+            }
+            CONNECTION_POOL.closeAll();
         }
     }
 
+    /**
+     * parse ddl from schema.sql in resources. <br>
+     * must do not has comments in schema.sql.
+     * @return pure ddl from schema.sql
+     */
     private static String parseDDL() {
         try (@SuppressWarnings("all") final BufferedReader reader
                      = new BufferedReader(new InputStreamReader(DatabaseConfig.class
@@ -63,5 +80,15 @@ public final class DatabaseConfig {
             log.error("cannot parse ddl!");
             throw new RuntimeException(e);
         }
+    }
+
+    /**
+     * log when critical error in running script
+     * @param log Location of which classes occurred error
+     * @param e occurred sql exception
+     */
+    public static void logDatabaseError(Logger log, SQLException e) {
+        log.error(e.getSQLState());
+        log.error(String.valueOf(e.getErrorCode()));
     }
 }

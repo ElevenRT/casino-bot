@@ -7,6 +7,14 @@ import org.yaml.snakeyaml.Yaml;
 import java.io.*;
 import java.util.Map;
 
+/**
+ * A class configurations the bot by referring to application.yml. <br>
+ * get danagerous content if exposure from java code. <br>
+ * for example: jdbc url, bot token
+ *
+ * @author iqpizza6349
+ * @version 1.0.0
+ */
 public final class AppConfig {
     private static final Logger log = LoggerFactory.getLogger(AppConfig.class);
 
@@ -16,6 +24,11 @@ public final class AppConfig {
     private static final String DB_PASSWORD;
     private static final Boolean USE_DDL;
 
+    /**
+     * parse raw data from origin string
+     * @param origin target to parse
+     * @return raw data
+     */
     private static String removeBrace(String origin) {
         return origin.replaceFirst("\\{", "")
                 .replaceFirst("}", "");
@@ -44,7 +57,7 @@ public final class AppConfig {
         }
     }
 
-    public AppConfig() {
+    private AppConfig() {
         throw new RuntimeException();
     }
 
