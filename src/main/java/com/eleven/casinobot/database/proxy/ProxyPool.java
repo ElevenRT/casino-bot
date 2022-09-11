@@ -17,7 +17,7 @@ import java.util.Set;
  * @see DatabaseTemplate
  */
 @SuppressWarnings("rawtypes")
-public class ProxyPool {
+public final class ProxyPool {
 
     private final Map<String, DatabaseTemplate> proxyDatabaseTemplates;
 

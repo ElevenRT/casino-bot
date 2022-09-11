@@ -7,7 +7,7 @@ package com.eleven.casinobot.database.proxy;
  * @author iqpizza6349
  * @version 1.0.0
  */
-public class ProxyAlreadyExistsException extends RuntimeException {
+public final class ProxyAlreadyExistsException extends RuntimeException {
 
     private static final long serialVersionUID = 1662884804804L;
 

@@ -14,7 +14,7 @@ import java.lang.reflect.Method;
  * @version 1.0.0
  */
 @SuppressWarnings("rawtypes")
-public class ProxyHandler implements MethodHandler {
+public final class ProxyHandler implements MethodHandler {
 
     private final DatabaseTemplate databaseTemplate;
 
