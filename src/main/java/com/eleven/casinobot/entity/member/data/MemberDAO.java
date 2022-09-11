@@ -14,6 +14,9 @@ import java.sql.Timestamp;
  * Refer to the member table to forward various queries, generate results with the mapper class
  * @see DatabaseTemplate
  * @see Database
+ *
+ * @author iqpizza6349
+ * @version 1.0.0
  */
 @Database
 public class MemberDAO extends DatabaseTemplate<Member, Long> {
