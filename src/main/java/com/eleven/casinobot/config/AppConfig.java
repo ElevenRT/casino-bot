@@ -24,6 +24,8 @@ public final class AppConfig {
     private static final String DB_PASSWORD;
     private static final Boolean USE_DDL;
 
+    private static final String ROOT_PACKAGE;
+
     /**
      * parse raw data from origin string
      * @param origin target to parse
@@ -42,6 +44,8 @@ public final class AppConfig {
             Map<String, Object> properties = (Map<String, Object>) data.get("bot");
             @SuppressWarnings("unchecked")
             Map<String, Object> databaseProperties = (Map<String, Object>) properties.get("database");
+            @SuppressWarnings("unchecked")
+            Map<String, Object> rootPackageProperties = (Map<String, Object>) data.get("code");
             TOKEN = removeBrace((String) properties.get("token"));
             log.debug("token: {}", TOKEN);
             DB_URL = removeBrace((String) databaseProperties.get("url"));
@@ -52,6 +56,8 @@ public final class AppConfig {
             log.debug("password: {}", DB_PASSWORD);
             USE_DDL = Boolean.parseBoolean(databaseProperties.get("use-ddl").toString());
             log.debug("use ddl: {}", USE_DDL);
+            ROOT_PACKAGE = removeBrace((String) rootPackageProperties.get("package"));
+            log.debug("root_package: {}", ROOT_PACKAGE);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -79,5 +85,9 @@ public final class AppConfig {
 
     public static boolean isUSE_DDL() {
         return USE_DDL;
+    }
+
+    public static String getRootPackage() {
+        return ROOT_PACKAGE;
     }
 }

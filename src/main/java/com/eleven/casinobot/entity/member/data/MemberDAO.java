@@ -1,6 +1,6 @@
 package com.eleven.casinobot.entity.member.data;
 
-import com.eleven.casinobot.annotations.Database;
+import com.eleven.casinobot.database.annotations.Database;
 import com.eleven.casinobot.database.DatabaseTemplate;
 import com.eleven.casinobot.entity.member.Member;
 import com.eleven.casinobot.entity.member.MemberType;

@@ -1,4 +1,4 @@
-package com.eleven.casinobot.annotations;
+package com.eleven.casinobot.database.annotations;
 
 import java.lang.annotation.*;
 
@@ -9,7 +9,7 @@ import java.lang.annotation.*;
  * @author iqpizza6349
  * @version 1.0.0
  */
-@Retention(RetentionPolicy.CLASS)
+@Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 public @interface Database {
 }

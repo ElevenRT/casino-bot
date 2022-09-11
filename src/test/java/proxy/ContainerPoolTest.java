@@ -2,7 +2,7 @@ package proxy;
 
 import com.eleven.casinobot.config.DatabaseConfig;
 import com.eleven.casinobot.database.DatabaseTemplate;
-import com.eleven.casinobot.database.proxy.ProxyPool;
+import com.eleven.casinobot.database.container.ContainerPool;
 import com.eleven.casinobot.entity.member.Member;
 import org.junit.jupiter.api.Test;
 
@@ -11,13 +11,13 @@ import java.util.Map;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SuppressWarnings("rawtypes")
-public class ProxyPoolTest {
+public class ContainerPoolTest {
 
     @Test
     public void findTemplateAndSaveTest() throws CloneNotSupportedException {
         // given
-        Map<String, DatabaseTemplate> databaseTemplateSet = ProxyPool.getInstance()
-                .getProxyDatabaseTemplates();
+        Map<String, DatabaseTemplate> databaseTemplateSet = ContainerPool.getInstance()
+                .getDatabaseTemplateContainer();
 
         // when
         assertThat(databaseTemplateSet).isNotEmpty();
@@ -29,8 +29,8 @@ public class ProxyPoolTest {
     public void proxySaveTest() throws CloneNotSupportedException {
         // given
         DatabaseConfig.initalizeDatabase();
-        Map<String, DatabaseTemplate> databaseTemplates = ProxyPool.getInstance()
-                .getProxyDatabaseTemplates();
+        Map<String, DatabaseTemplate> databaseTemplates = ContainerPool.getInstance()
+                .getDatabaseTemplateContainer();
         Member member = Member.builder().build();
 
         // when
