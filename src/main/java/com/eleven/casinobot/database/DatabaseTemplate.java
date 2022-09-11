@@ -25,7 +25,7 @@ import java.util.function.Function;
  * @author iqpizza6349
  * @version 1.0.0
  */
-public abstract class DatabaseTemplate<T, K> {
+public abstract class DatabaseTemplate<T, K> implements Cloneable {
     protected static final Logger log = LoggerFactory.getLogger(DatabaseTemplate.class);
     private static final ConnectionPool CONNECTION_POOL = ConnectionPool.getInstance(5, 100);
 
@@ -129,5 +129,11 @@ public abstract class DatabaseTemplate<T, K> {
      * @return mapper (same as {@link T})
      * @throws SQLException caused when {@link ResultSet#next()} method has invoked
      */
-    protected abstract T result(ResultSet resultSet) throws SQLException ;
+    protected abstract T result(ResultSet resultSet) throws SQLException;
+
+    @Override
+    @SuppressWarnings("rawtypes")
+    public DatabaseTemplate clone() throws CloneNotSupportedException {
+        return (DatabaseTemplate) super.clone();
+    }
 }
