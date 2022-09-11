@@ -9,6 +9,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 
+/**
+ * The member database management class that inherited the database template class.
+ * Refer to the member table to forward various queries, generate results with the mapper class
+ * @see DatabaseTemplate
+ * @see Database
+ */
 @Database
 public class MemberDAO extends DatabaseTemplate<Member, Long> {
 
@@ -23,9 +29,7 @@ public class MemberDAO extends DatabaseTemplate<Member, Long> {
                 getDataOrDefault(entity.getBrokenAt()),
                 getDataOrDefault(entity.isBroken())
         );
-        sql = sql + values;
-        log.info(sql);
-        return sql;
+        return sql + values;
     }
 
     @Override

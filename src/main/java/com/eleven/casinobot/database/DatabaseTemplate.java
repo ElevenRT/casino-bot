@@ -22,6 +22,7 @@ import java.util.function.Function;
  * @param <K> Unique type of type to return
  *
  * @see ConnectionPool
+ * @see Cloneable
  * @author iqpizza6349
  * @version 1.0.0
  */
@@ -36,10 +37,12 @@ public abstract class DatabaseTemplate<T, K> implements Cloneable {
      */
     public final T selectById(K id) {
         Connection connection = null;
+        final String sql = selectByIdQuery(id);
         try {
             connection = CONNECTION_POOL.getConnection();
             try (final PreparedStatement statement = connection
-                    .prepareStatement(selectByIdQuery(id))) {
+                    .prepareStatement(sql)) {
+                log.info(sql);
                 try (final ResultSet resultSet = statement.executeQuery()) {
                     return result(resultSet);
                 }
@@ -64,10 +67,13 @@ public abstract class DatabaseTemplate<T, K> implements Cloneable {
      */
     public final void save(T entity) {
         Connection connection = null;
+        final String sql = saveQuery(entity);
+
         try {
             connection = CONNECTION_POOL.getConnection();
             try (final PreparedStatement statement = connection
-                    .prepareStatement(saveQuery(entity))) {
+                    .prepareStatement(sql)) {
+                log.info(sql);
                 statement.execute();
             }
         } catch (SQLException e) {
