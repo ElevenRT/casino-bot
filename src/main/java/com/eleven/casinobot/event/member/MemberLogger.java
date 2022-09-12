@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @EventHandler
+@SuppressWarnings("unused")
 public class MemberLogger extends ListenerAdapter {
 
     private static final Logger log = LoggerFactory.getLogger(MemberLogger.class);
