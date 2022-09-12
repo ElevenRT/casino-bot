@@ -14,6 +14,32 @@ public class Member {
         return new Member.Builder();
     }
 
+    public Member(Long userId) {
+        this(userId, null);
+    }
+
+    public Member(Long userId, Long money) {
+        this(userId, money, null);
+    }
+
+    public Member(Long userId, Long money, MemberType memberType) {
+        this(userId, money, memberType, null);
+    }
+
+    public Member(Long userId, Long money, MemberType memberType,
+                  LocalDateTime brokenAt) {
+        this(userId, money, memberType, brokenAt, null);
+    }
+
+    public Member(Long userId, Long money, MemberType memberType,
+                  LocalDateTime brokenAt, Boolean broken) {
+        this.userId = userId;
+        this.money = money;
+        this.memberType = memberType;
+        this.brokenAt = brokenAt;
+        this.broken = broken;
+    }
+
     public static class Builder {
         private Long userId;
         private Long money;

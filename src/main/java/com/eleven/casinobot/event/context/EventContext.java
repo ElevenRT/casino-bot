@@ -1,7 +1,7 @@
 package com.eleven.casinobot.event.context;
 
 import com.eleven.casinobot.config.scanner.ReflectionScanner;
-import com.eleven.casinobot.event.annotations.EventListener;
+import com.eleven.casinobot.event.annotations.EventHandler;
 import com.eleven.casinobot.event.annotations.Inject;
 import com.eleven.casinobot.config.AppConfig;
 import com.eleven.casinobot.database.DatabaseTemplate;
@@ -18,26 +18,34 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * Inject 어노테이션이 있는 필드에 직접 주입을 합니다.
- * 해당 타입이 DatabaseTemplate 이고, 필드명이 프록시로 저장되어 있다면,
- * 주입해주고, 그렇지않다면, 예외를 발생합니다.
+ * Inject directly into the field with the Inject annotation.
+ * If this type is Database Template and you have a database template with a field name, inject the data in field
+ * otherwise, an exception occurs.
  * @see TemplateNotDefinedException
+ * @author iqpizza6349
+ * @version 1.0.0
  */
 public final class EventContext {
     private static final Map<Class<?>, Object> contextRegistry = new HashMap<>();
 
-    private final ContainerPool PROXY_POOL;
+    private final ContainerPool containerPool;
 
-    public EventContext() {
-        PROXY_POOL = ContainerPool.getInstance();
-        initializeContext();
+    public EventContext(boolean includeDeprecated) {
+        containerPool = ContainerPool.getInstance();
+        initializeContext(includeDeprecated);
     }
 
-    private void initializeContext() {
+    private void initializeContext(boolean includeDeprecated) {
         Set<Class<?>> classes = findClasses(AppConfig.getRootPackage());
         for (Class<?> loadingClass : classes) {
             try {
-                if (loadingClass.isAnnotationPresent(EventListener.class)) {
+                if (loadingClass.isAnnotationPresent(EventHandler.class)) {
+                    if (!includeDeprecated) {
+                        if (loadingClass.isAnnotationPresent(Deprecated.class)) {
+                            continue;
+                        }
+                    }
+
                     Constructor<?> constructor = loadingClass.getDeclaredConstructor();
                     Object instance = constructor.newInstance();
                     contextRegistry.put(loadingClass, instance);
@@ -67,6 +75,18 @@ public final class EventContext {
         return object;
     }
 
+    public Set<?> getAllEventHandler() throws IllegalAccessException {
+        Set<Object> eventHandler = new HashSet<>();
+        for (Map.Entry<Class<?>, Object> listener : contextRegistry.entrySet()) {
+            Object instance = listener.getValue();
+            eventHandler.add(instance);
+            Field[] declaredField = listener.getKey().getDeclaredFields();
+            injectAnnotatedField(instance, declaredField);
+        }
+
+        return eventHandler;
+    }
+
     private <T> void injectAnnotatedField(T object, Field[] declaredFields) throws IllegalAccessException {
         for (Field field : declaredFields) {
             if (field.isAnnotationPresent(Inject.class)) {
@@ -90,7 +110,7 @@ public final class EventContext {
     @SuppressWarnings("rawtypes")
     private DatabaseTemplate getProxyDatabase(String name) {
         try {
-            return PROXY_POOL.getDatabaseTemplate(name);
+            return containerPool.getDatabaseTemplate(name);
         } catch (CloneNotSupportedException e) {
             throw new RuntimeException(e);
         }
