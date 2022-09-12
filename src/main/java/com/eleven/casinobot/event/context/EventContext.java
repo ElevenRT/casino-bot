@@ -1,13 +1,13 @@
 package com.eleven.casinobot.event.context;
 
-import com.eleven.casinobot.config.scanner.ReflectionScanner;
 import com.eleven.casinobot.event.annotations.EventHandler;
-import com.eleven.casinobot.event.annotations.Inject;
+import com.eleven.casinobot.event.annotations.Injection;
 import com.eleven.casinobot.config.AppConfig;
 import com.eleven.casinobot.database.DatabaseTemplate;
 import com.eleven.casinobot.database.container.TemplateNotDefinedException;
 import com.eleven.casinobot.database.container.ContainerPool;
 import org.reflections.Reflections;
+import org.reflections.scanners.Scanners;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
@@ -39,17 +39,15 @@ public final class EventContext {
         Set<Class<?>> classes = findClasses(AppConfig.getRootPackage());
         for (Class<?> loadingClass : classes) {
             try {
-                if (loadingClass.isAnnotationPresent(EventHandler.class)) {
-                    if (!includeDeprecated) {
-                        if (loadingClass.isAnnotationPresent(Deprecated.class)) {
-                            continue;
-                        }
+                if (!includeDeprecated) {
+                    if (loadingClass.isAnnotationPresent(Deprecated.class)) {
+                        continue;
                     }
-
-                    Constructor<?> constructor = loadingClass.getDeclaredConstructor();
-                    Object instance = constructor.newInstance();
-                    contextRegistry.put(loadingClass, instance);
                 }
+
+                Constructor<?> constructor = loadingClass.getDeclaredConstructor();
+                Object instance = constructor.newInstance();
+                contextRegistry.put(loadingClass, instance);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -58,9 +56,9 @@ public final class EventContext {
 
     private Set<Class<?>> findClasses(String packageName) {
         Reflections reflections = new Reflections(
-                packageName, new ReflectionScanner()
+                packageName, Scanners.TypesAnnotated
         );
-        return new HashSet<>(reflections.getSubTypesOf(Object.class));
+        return new HashSet<>(reflections.getTypesAnnotatedWith(EventHandler.class));
     }
 
     public <T> T getInstance(Class<T> clazz) throws IllegalAccessException {
@@ -89,10 +87,10 @@ public final class EventContext {
 
     private <T> void injectAnnotatedField(T object, Field[] declaredFields) throws IllegalAccessException {
         for (Field field : declaredFields) {
-            if (field.isAnnotationPresent(Inject.class)) {
+            if (field.isAnnotationPresent(Injection.class)) {
                 final Class<?> type = field.getType();
-                final String name = (field.getAnnotation(Inject.class).name().equals(""))
-                        ? type.getSimpleName() : field.getAnnotation(Inject.class).name();
+                final String name = (field.getAnnotation(Injection.class).name().equals(""))
+                        ? type.getSimpleName() : field.getAnnotation(Injection.class).name();
                 if (type.getSuperclass() != DatabaseTemplate.class && type != DatabaseTemplate.class) {
                     throw new TemplateNotDefinedException(name, type);
                 }

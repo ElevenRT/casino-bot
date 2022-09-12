@@ -1,10 +1,10 @@
 package com.eleven.casinobot.event.test;
 
 import com.eleven.casinobot.database.DatabaseTemplate;
-import com.eleven.casinobot.entity.member.Member;
-import com.eleven.casinobot.entity.member.data.MemberDAO;
+import com.eleven.casinobot.mapper.member.Member;
+import com.eleven.casinobot.mapper.member.data.MemberDAO;
 import com.eleven.casinobot.event.annotations.EventHandler;
-import com.eleven.casinobot.event.annotations.Inject;
+import com.eleven.casinobot.event.annotations.Injection;
 
 /**
  * do not use in real
@@ -14,7 +14,7 @@ import com.eleven.casinobot.event.annotations.Inject;
 @EventHandler
 public class TestListener {
 
-    @Inject(name = "MemberDAO")
+    @Injection(name = "MemberDAO")
     @SuppressWarnings("unused")
     private MemberDAO memberDAO;
 

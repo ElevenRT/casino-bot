@@ -3,7 +3,7 @@ package proxy;
 import com.eleven.casinobot.config.DatabaseConfig;
 import com.eleven.casinobot.database.DatabaseTemplate;
 import com.eleven.casinobot.database.container.ContainerPool;
-import com.eleven.casinobot.entity.member.Member;
+import com.eleven.casinobot.mapper.member.Member;
 import org.junit.jupiter.api.Test;
 
 import java.util.Map;

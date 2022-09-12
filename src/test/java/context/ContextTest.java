@@ -1,8 +1,8 @@
 package context;
 
 import com.eleven.casinobot.config.DatabaseConfig;
-import com.eleven.casinobot.entity.member.Member;
-import com.eleven.casinobot.entity.member.data.MemberDAO;
+import com.eleven.casinobot.mapper.member.Member;
+import com.eleven.casinobot.mapper.member.data.MemberDAO;
 import com.eleven.casinobot.event.context.EventContext;
 import com.eleven.casinobot.event.test.TestListener;
 import org.junit.jupiter.api.Test;
@@ -36,6 +36,4 @@ public class ContextTest {
         MemberDAO memberDAO = (MemberDAO) testListener.getMemberDAO();
         memberDAO.save(member);
     }
-
-
 }
