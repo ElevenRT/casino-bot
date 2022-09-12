@@ -84,6 +84,27 @@ public abstract class DatabaseTemplate<T, K> implements Cloneable {
         }
     }
 
+    public final boolean existsById(K id) {
+        Connection connection = null;
+        final String sql = selectByIdQuery(id);
+
+        try {
+            connection = CONNECTION_POOL.getConnection();
+            try (final PreparedStatement statement = connection
+                    .prepareStatement(sql)) {
+                log.info(sql);
+                try (final ResultSet resultSet = statement.executeQuery()) {
+                    return resultSet.next();
+                }
+            }
+        } catch (SQLException e) {
+            DatabaseConfig.logDatabaseError(log, e);
+            throw new RuntimeException(e);
+        } finally {
+            CONNECTION_POOL.releaseConnection(connection);
+        }
+    }
+
     /**
      * format the data for DAO class
      * @param s the specified format string
