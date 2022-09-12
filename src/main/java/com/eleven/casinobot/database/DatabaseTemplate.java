@@ -160,7 +160,7 @@ public abstract class DatabaseTemplate<T, K> implements Cloneable {
 
     @Override
     @SuppressWarnings("rawtypes")
-    public DatabaseTemplate clone() throws CloneNotSupportedException {
+    public final DatabaseTemplate clone() throws CloneNotSupportedException {
         return (DatabaseTemplate) super.clone();
     }
 }

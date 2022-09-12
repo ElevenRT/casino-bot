@@ -100,13 +100,13 @@ public final class EventContext {
                     field.setAccessible(true);
                 }
 
-                field.set(object, getProxyDatabase(name));
+                field.set(object, getCloneDatabase(name));
             }
         }
     }
 
     @SuppressWarnings("rawtypes")
-    private DatabaseTemplate getProxyDatabase(String name) {
+    private DatabaseTemplate getCloneDatabase(String name) {
         try {
             return containerPool.getDatabaseTemplate(name);
         } catch (CloneNotSupportedException e) {
