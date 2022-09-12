@@ -1,9 +1,9 @@
 package data;
 
 import com.eleven.casinobot.config.DatabaseConfig;
-import com.eleven.casinobot.entity.member.Member;
-import com.eleven.casinobot.entity.member.MemberType;
-import com.eleven.casinobot.entity.member.data.MemberDAO;
+import com.eleven.casinobot.mapper.member.Member;
+import com.eleven.casinobot.mapper.member.MemberType;
+import com.eleven.casinobot.mapper.member.data.MemberDAO;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

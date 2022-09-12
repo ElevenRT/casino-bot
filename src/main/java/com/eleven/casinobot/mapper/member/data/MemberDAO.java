@@ -1,9 +1,9 @@
-package com.eleven.casinobot.entity.member.data;
+package com.eleven.casinobot.mapper.member.data;
 
 import com.eleven.casinobot.database.annotations.Database;
 import com.eleven.casinobot.database.DatabaseTemplate;
-import com.eleven.casinobot.entity.member.Member;
-import com.eleven.casinobot.entity.member.MemberType;
+import com.eleven.casinobot.mapper.member.Member;
+import com.eleven.casinobot.mapper.member.MemberType;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

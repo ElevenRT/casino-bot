@@ -1,4 +1,4 @@
-package com.eleven.casinobot.entity.member;
+package com.eleven.casinobot.mapper.member;
 
 public enum MemberType {
     GENERAL, VIP, MANAGER

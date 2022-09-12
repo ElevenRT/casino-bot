@@ -1,4 +1,4 @@
-package com.eleven.casinobot.entity.member;
+package com.eleven.casinobot.mapper.member;
 
 import java.time.LocalDateTime;
 
