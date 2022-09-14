@@ -9,7 +9,7 @@ import java.util.Map;
 
 /**
  * A class configurations the bot by referring to application.yml. <br>
- * get danagerous content if exposure from java code. <br>
+ * get dangerous content if exposure from java code. <br>
  * for example: jdbc url, bot token
  *
  * @author iqpizza6349
