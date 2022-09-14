@@ -1,5 +1,6 @@
 package com.eleven.casinobot.event.context;
 
+import ch.qos.logback.core.joran.spi.DefaultClass;
 import com.eleven.casinobot.event.annotations.EventHandler;
 import com.eleven.casinobot.event.annotations.Injection;
 import com.eleven.casinobot.config.AppConfig;
@@ -12,16 +13,18 @@ import org.reflections.scanners.Scanners;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
- * Inject directly into the field with the Inject annotation.
- * If this type is Database Template and you have a database template with a field name, inject the data in field
- * otherwise, an exception occurs.
+ * Collecting Classes and make instances which has EventHandler annotation.
+ * Using Injection annotation Inject directly into the field.
+ * If this field type is Database Template, inject the data(class) in field.
+ * otherwise, an exception occurs
+ *
  * @see TemplateNotDefinedException
+ * @see EventHandler
+ * @see Injection
+ * @see DatabaseTemplate
  * @author iqpizza6349
  * @version 1.0.0
  */
@@ -40,13 +43,16 @@ public final class EventContext {
         for (Class<?> loadingClass : classes) {
             try {
                 if (!includeDeprecated) {
-                    if (loadingClass.isAnnotationPresent(Deprecated.class)) {
+                    if (loadingClass.isAnnotationPresent(DefaultClass.class)
+                            && !loadingClass.isAnnotation()) {
                         continue;
                     }
                 }
 
-                Constructor<?> constructor = loadingClass.getDeclaredConstructor();
-                Object instance = constructor.newInstance();
+                Class<?>[] fields = findConstructorFields(loadingClass);
+                Constructor<?> constructor = loadingClass.getConstructor(fields);
+
+                Object instance = constructor.newInstance(dependencyDatabase(fields));
                 contextRegistry.put(loadingClass, instance);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -54,11 +60,47 @@ public final class EventContext {
         }
     }
 
+    private Class<?>[] findConstructorFields(Class<?> clazz) {
+        Field[] fields = clazz.getDeclaredFields();
+        final int fieldCount = fields.length;
+        Class<?>[] types = new Class<?>[fieldCount];
+        for (int i = 0; i < fieldCount; i++) {
+            Field field = fields[i];
+            int modifier = field.getModifiers();
+            if (Modifier.isStatic(modifier)) {
+                continue;
+            }
+
+            if ((!Modifier.isPrivate(modifier)) || (!Modifier.isFinal(modifier))) {
+                continue;
+            }
+
+            checkDatabaseField(field.getType(), field.getName());
+            types[i] = field.getType();
+        }
+
+        return Arrays.stream(types)
+                .filter(Objects::nonNull)
+                .toArray(Class[]::new);
+    }
+
+
     private Set<Class<?>> findClasses(String packageName) {
         Reflections reflections = new Reflections(
                 packageName, Scanners.TypesAnnotated
         );
         return new HashSet<>(reflections.getTypesAnnotatedWith(EventHandler.class));
+    }
+
+    private Object[] dependencyDatabase(Class<?>[] dependencyFields) {
+        final int fieldCount = dependencyFields.length;
+        Object[] dependencies = new Object[fieldCount];
+        for (int i = 0; i < fieldCount; i++) {
+            Class<?> clazz = dependencyFields[i];
+            dependencies[i] = getSingletonDatabase(clazz.getSimpleName());
+        }
+
+        return dependencies;
     }
 
     public <T> T getInstance(Class<T> clazz) throws IllegalAccessException {
@@ -85,28 +127,33 @@ public final class EventContext {
         return eventHandler;
     }
 
+    @SuppressWarnings("deprecation")
     private <T> void injectAnnotatedField(T object, Field[] declaredFields) throws IllegalAccessException {
         for (Field field : declaredFields) {
             if (field.isAnnotationPresent(Injection.class)) {
                 final Class<?> type = field.getType();
                 final String name = (field.getAnnotation(Injection.class).name().equals(""))
                         ? type.getSimpleName() : field.getAnnotation(Injection.class).name();
-                if (type.getSuperclass() != DatabaseTemplate.class && type != DatabaseTemplate.class) {
-                    throw new TemplateNotDefinedException(name, type);
-                }
+                checkDatabaseField(type, name);
 
                 int modifier = field.getModifiers();
                 if (Modifier.isProtected(modifier) || Modifier.isPrivate(modifier)) {
                     field.setAccessible(true);
                 }
 
-                field.set(object, getCloneDatabase(name));
+                field.set(object, getSingletonDatabase(name));
             }
         }
     }
 
+    private void checkDatabaseField(Class<?> type, String name) {
+        if (type.getSuperclass() != DatabaseTemplate.class && type != DatabaseTemplate.class) {
+            throw new TemplateNotDefinedException(name, type);
+        }
+    }
+
     @SuppressWarnings("rawtypes")
-    private DatabaseTemplate getCloneDatabase(String name) {
+    private DatabaseTemplate getSingletonDatabase(String name) {
         try {
             return containerPool.getDatabaseTemplate(name);
         } catch (CloneNotSupportedException e) {

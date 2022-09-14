@@ -1,5 +1,8 @@
 package com.eleven.casinobot.event.context;
 
+/**
+ * A class that stores event contexts in a single tone manner, simply in a single tone.
+ */
 public final class EventContextSingleton {
 
     private static EventContext eventContext;
