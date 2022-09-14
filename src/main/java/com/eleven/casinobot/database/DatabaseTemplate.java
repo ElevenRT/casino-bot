@@ -29,7 +29,7 @@ import java.util.function.Function;
  */
 public abstract class DatabaseTemplate<T, K> implements Cloneable {
     protected static final Logger log = LoggerFactory.getLogger(DatabaseTemplate.class);
-    private static final ConnectionPool CONNECTION_POOL = ConnectionPool.getInstance(5, 100);
+    private static final ConnectionPool CONNECTION_POOL = ConnectionPool.getInstance(5, 10);
 
     /**
      * select type with unique type
