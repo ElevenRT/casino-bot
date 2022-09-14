@@ -28,7 +28,9 @@ public class ContextTest {
         // given
         DatabaseConfig.initalizeDatabase();
         EventContext eventContext = new EventContext(true);
-        Member member = new Member((Long) null);
+        Member member = Member.builder()
+                .userId(1L)
+                .build();
 
         // when
         @SuppressWarnings("deprecation")

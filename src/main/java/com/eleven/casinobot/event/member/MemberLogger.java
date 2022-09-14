@@ -1,7 +1,6 @@
 package com.eleven.casinobot.event.member;
 
 import com.eleven.casinobot.event.annotations.EventHandler;
-import com.eleven.casinobot.event.annotations.Injection;
 import com.eleven.casinobot.mapper.member.Member;
 import com.eleven.casinobot.mapper.member.data.MemberDAO;
 import net.dv8tion.jda.api.entities.User;
@@ -17,8 +16,11 @@ public class MemberLogger extends ListenerAdapter {
 
     private static final Logger log = LoggerFactory.getLogger(MemberLogger.class);
 
-    @Injection
-    private MemberDAO memberDAO;
+    private final MemberDAO memberDAO;
+
+    public MemberLogger(MemberDAO memberDAO) {
+        this.memberDAO = memberDAO;
+    }
 
     @Override
     public void onMessageReceived(@NotNull MessageReceivedEvent event) {
