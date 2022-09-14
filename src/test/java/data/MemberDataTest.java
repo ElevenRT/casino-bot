@@ -32,7 +32,8 @@ public class MemberDataTest {
 
         // when
         Instant findInstant = Instant.now();
-        Member savedMember = memberDAO.selectById(1L);
+        @SuppressWarnings("OptionalGetWithoutIsPresent")
+        Member savedMember = memberDAO.selectById(1L).get();
         Duration findDuration = Duration.between(findInstant, Instant.now());
         log.info("find duration: {}ms", findDuration.toMillis());
 

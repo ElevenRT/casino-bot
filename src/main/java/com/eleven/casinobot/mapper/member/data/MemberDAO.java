@@ -8,6 +8,7 @@ import com.eleven.casinobot.mapper.member.MemberType;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.util.Optional;
 
 /**
  * The member database management class that inherited the database template class.
@@ -41,7 +42,7 @@ public class MemberDAO extends DatabaseTemplate<Member, Long> {
     }
 
     @Override
-    protected Member result(ResultSet resultSet) throws SQLException {
+    protected Optional<Member> result(ResultSet resultSet) throws SQLException {
         Member member = null;
         while (resultSet.next()) {
             member = Member.builder()
@@ -53,6 +54,6 @@ public class MemberDAO extends DatabaseTemplate<Member, Long> {
                     .broken(resultSet.getBoolean("broken"))
                     .build();
         }
-        return member;
+        return Optional.ofNullable(member);
     }
 }

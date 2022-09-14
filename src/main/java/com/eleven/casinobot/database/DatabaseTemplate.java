@@ -10,6 +10,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Formatter;
+import java.util.Optional;
 import java.util.function.Function;
 
 /**
@@ -28,14 +29,14 @@ import java.util.function.Function;
  */
 public abstract class DatabaseTemplate<T, K> implements Cloneable {
     protected static final Logger log = LoggerFactory.getLogger(DatabaseTemplate.class);
-    private static final ConnectionPool CONNECTION_POOL = ConnectionPool.getInstance(5, 100);
+    private static final ConnectionPool CONNECTION_POOL = ConnectionPool.getInstance(5, 10);
 
     /**
      * select type with unique type
      * @param id unique type such as Integer
      * @return select type's primary key is same as {@link K}
      */
-    public final T selectById(K id) {
+    public final Optional<T> selectById(K id) {
         Connection connection = null;
         final String sql = selectByIdQuery(id);
         try {
@@ -156,7 +157,7 @@ public abstract class DatabaseTemplate<T, K> implements Cloneable {
      * @return mapper (same as {@link T})
      * @throws SQLException caused when {@link ResultSet#next()} method has invoked
      */
-    protected abstract T result(ResultSet resultSet) throws SQLException;
+    protected abstract Optional<T> result(ResultSet resultSet) throws SQLException;
 
     @Override
     @SuppressWarnings("rawtypes")
