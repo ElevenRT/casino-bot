@@ -111,7 +111,7 @@ public final class EventContext {
         }
 
         Field[] declaredField = clazz.getDeclaredFields();
-        injectAnnotatedType(object, declaredField);
+        injectAnnotatedField(object, declaredField);
         return object;
     }
 
@@ -121,13 +121,14 @@ public final class EventContext {
             Object instance = listener.getValue();
             eventHandler.add(instance);
             Field[] declaredField = listener.getKey().getDeclaredFields();
-            injectAnnotatedType(instance, declaredField);
+            injectAnnotatedField(instance, declaredField);
         }
 
         return eventHandler;
     }
 
-    private <T> void injectAnnotatedType(T object, Field[] declaredFields) throws IllegalAccessException {
+    @SuppressWarnings("deprecation")
+    private <T> void injectAnnotatedField(T object, Field[] declaredFields) throws IllegalAccessException {
         for (Field field : declaredFields) {
             if (field.isAnnotationPresent(Injection.class)) {
                 final Class<?> type = field.getType();
