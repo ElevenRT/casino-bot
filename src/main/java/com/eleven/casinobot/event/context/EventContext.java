@@ -1,6 +1,5 @@
 package com.eleven.casinobot.event.context;
 
-import ch.qos.logback.core.joran.spi.DefaultClass;
 import com.eleven.casinobot.event.annotations.EventHandler;
 import com.eleven.casinobot.event.annotations.Injection;
 import com.eleven.casinobot.config.AppConfig;
@@ -43,7 +42,7 @@ public final class EventContext {
         for (Class<?> loadingClass : classes) {
             try {
                 if (!includeDeprecated) {
-                    if (loadingClass.isAnnotationPresent(DefaultClass.class)
+                    if (loadingClass.isAnnotationPresent(Deprecated.class)
                             && !loadingClass.isAnnotation()) {
                         continue;
                     }
