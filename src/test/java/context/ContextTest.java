@@ -3,7 +3,7 @@ package context;
 import com.eleven.casinobot.config.DatabaseConfig;
 import com.eleven.casinobot.mapper.member.Member;
 import com.eleven.casinobot.mapper.member.data.MemberDAO;
-import com.eleven.casinobot.context.EventContext;
+import com.eleven.casinobot.context.event.EventContext;
 import com.eleven.casinobot.event.test.TestListener;
 import org.junit.jupiter.api.Test;
 
