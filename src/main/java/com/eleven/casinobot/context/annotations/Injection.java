@@ -1,4 +1,4 @@
-package com.eleven.casinobot.event.annotations;
+package com.eleven.casinobot.context.annotations;
 
 import java.lang.annotation.*;
 

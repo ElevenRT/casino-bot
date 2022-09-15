@@ -1,7 +1,7 @@
 package com.eleven.casinobot.config;
 
 import com.eleven.casinobot.event.ReadyListener;
-import com.eleven.casinobot.event.context.EventContextSingleton;
+import com.eleven.casinobot.context.EventContextSingleton;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;

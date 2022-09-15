@@ -1,6 +1,6 @@
 package com.eleven.casinobot.event.member;
 
-import com.eleven.casinobot.event.annotations.EventHandler;
+import com.eleven.casinobot.context.annotations.EventHandler;
 import com.eleven.casinobot.mapper.member.Member;
 import com.eleven.casinobot.mapper.member.data.MemberDAO;
 import net.dv8tion.jda.api.entities.User;

@@ -1,6 +1,6 @@
 package dependency;
 
-import com.eleven.casinobot.event.context.EventContext;
+import com.eleven.casinobot.context.EventContext;
 import com.eleven.casinobot.event.test.TestListener;
 import org.junit.jupiter.api.Test;
 

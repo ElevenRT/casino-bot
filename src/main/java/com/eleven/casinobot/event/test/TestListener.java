@@ -1,10 +1,10 @@
 package com.eleven.casinobot.event.test;
 
 import com.eleven.casinobot.database.DatabaseTemplate;
-import com.eleven.casinobot.event.annotations.Injection;
+import com.eleven.casinobot.context.annotations.Injection;
 import com.eleven.casinobot.mapper.member.Member;
 import com.eleven.casinobot.mapper.member.data.MemberDAO;
-import com.eleven.casinobot.event.annotations.EventHandler;
+import com.eleven.casinobot.context.annotations.EventHandler;
 
 /**
  * do not use in real

@@ -1,7 +1,7 @@
-package com.eleven.casinobot.event.context;
+package com.eleven.casinobot.context;
 
-import com.eleven.casinobot.event.annotations.EventHandler;
-import com.eleven.casinobot.event.annotations.Injection;
+import com.eleven.casinobot.context.annotations.EventHandler;
+import com.eleven.casinobot.context.annotations.Injection;
 import com.eleven.casinobot.config.AppConfig;
 import com.eleven.casinobot.database.DatabaseTemplate;
 import com.eleven.casinobot.database.container.TemplateNotDefinedException;
