@@ -1,4 +1,4 @@
-package com.eleven.casinobot.context;
+package com.eleven.casinobot.context.event;
 
 /**
  * A class that stores event contexts in a single tone manner, simply in a single tone.

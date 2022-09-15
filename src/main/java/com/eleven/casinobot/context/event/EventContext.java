@@ -1,4 +1,4 @@
-package com.eleven.casinobot.context;
+package com.eleven.casinobot.context.event;
 
 import com.eleven.casinobot.context.annotations.EventHandler;
 import com.eleven.casinobot.context.annotations.Injection;

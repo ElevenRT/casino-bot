@@ -1,4 +1,4 @@
-package proxy;
+package context;
 
 import com.eleven.casinobot.config.DatabaseConfig;
 import com.eleven.casinobot.database.DatabaseTemplate;
