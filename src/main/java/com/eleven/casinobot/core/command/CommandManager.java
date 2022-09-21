@@ -1,5 +1,6 @@
 package com.eleven.casinobot.core.command;
 
+import com.eleven.casinobot.core.annotations.Command;
 import com.eleven.casinobot.core.annotations.EventHandler;
 import com.eleven.casinobot.core.context.ComponentContextSingleton;
 import net.dv8tion.jda.api.hooks.EventListener;
@@ -8,6 +9,16 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * A CommandManager class is a manager class that calls command classes and calls
+ * specific methods when an event occurs. The EventListener annotation dynamically
+ * stores and invokes the command classes specified in the commands array.
+ * @see Command
+ * @see EventListener
+ * @see ComponentContextSingleton
+ * @see ICommand
+ * @author iqpizza6349
+ */
 public final class CommandManager {
 
     private static Map<Class<?>, ?> Commands;
@@ -22,6 +33,14 @@ public final class CommandManager {
         }
     }
 
+    /**
+     * The instruction classes are dynamically stored and the same instruction (method)
+     * is called among the currently existing instructions.
+     * @param caller To dynamically save and recall commands to
+     * @param value The value corresponding to the command. ex) /ping -> value is 'ping'
+     * @param ctx Occurred Event
+     * @see CommandContext
+     */
     public static void invoke(Object caller, final String value, CommandContext ctx) {
         Class<?> callerClass = caller.getClass();
         load(callerClass);
@@ -65,6 +84,13 @@ public final class CommandManager {
         }
     }
 
+    /**
+     * Returns a collection of value data in Command Annotation in command classes.
+     * These aggregates are not duplicated. If redundancy occurs to avoid duplication,
+     * an exception occurs.
+     * @see Command
+     * @return Returns a collection of value data in Command Annotation in command classes.
+     */
     public static Set<Command> commandValues() {
         return Commands.keySet().stream().map(aClass ->
                         aClass.getAnnotation(Command.class))

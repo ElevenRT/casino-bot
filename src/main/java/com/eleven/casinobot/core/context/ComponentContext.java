@@ -4,7 +4,7 @@ import com.eleven.casinobot.core.annotations.Component;
 import com.eleven.casinobot.core.annotations.EventHandler;
 import com.eleven.casinobot.core.annotations.Injection;
 import com.eleven.casinobot.config.AppConfig;
-import com.eleven.casinobot.core.command.Command;
+import com.eleven.casinobot.core.annotations.Command;
 import com.eleven.casinobot.core.util.Utils;
 import com.eleven.casinobot.database.AbstractDatabaseTemplate;
 import com.eleven.casinobot.database.container.TemplateNotDefinedException;

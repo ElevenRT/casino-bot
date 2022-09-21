@@ -1,6 +1,6 @@
 package com.eleven.casinobot.config;
 
-import com.eleven.casinobot.core.command.Command;
+import com.eleven.casinobot.core.annotations.Command;
 import com.eleven.casinobot.core.command.CommandManager;
 import com.eleven.casinobot.event.ReadyListener;
 import com.eleven.casinobot.core.context.ComponentContextSingleton;
