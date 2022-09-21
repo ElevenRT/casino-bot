@@ -48,6 +48,10 @@ public final class CommandManager {
     }
 
     private static void load(Class<?> caller) {
+        // already add all commands
+        if (listenerCommands.get(caller) != null) {
+            return;
+        }
         if (caller.getSuperclass() != ListenerAdapter.class
                 || Arrays.stream(caller.getInterfaces()).anyMatch(clazz -> clazz == EventListener.class)) {
             throw new RuntimeException("Caller must extends ListenerAdapter.class" +
