@@ -1,6 +1,6 @@
 package com.eleven.casinobot.mapper.game.data;
 
-import com.eleven.casinobot.database.DatabaseTemplate;
+import com.eleven.casinobot.database.AbstractDatabaseTemplate;
 import com.eleven.casinobot.database.annotations.Database;
 import com.eleven.casinobot.mapper.game.Game;
 import com.eleven.casinobot.mapper.game.GameType;
@@ -10,7 +10,7 @@ import java.sql.SQLException;
 import java.util.Optional;
 
 @Database
-public class GameDAO extends DatabaseTemplate<Game, Integer> {
+public class GameDAO extends AbstractDatabaseTemplate<Game, Integer> {
 
     @Override
     protected String saveQuery(Game entity) {

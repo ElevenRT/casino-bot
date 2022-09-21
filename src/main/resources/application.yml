@@ -1,10 +1,10 @@
 bot:
-  token: ${TOKEN}
+  token: ODg4NDc0NzI1NDE4OTU0Nzky.G9W70w.uEouGtQdnmkYdQL4B54jrwOD_54QIrNSwZoC1E
   database:
-    url: ${JDBC_URL}
-    username: ${USERNAME}
-    password: ${PASSWORD}
-    use-ddl: ${USE_DDL}
+    url: jdbc:postgresql://localhost:5432/casino_db?serverTimezone=UTC
+    username: postgres
+    password: Coffee4Sip
+    use-ddl: true
 
 code:
-  package: ${BASE_PACKAGE}
+  package: com.eleven.casinobot

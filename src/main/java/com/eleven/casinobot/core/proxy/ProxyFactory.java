@@ -1,30 +1,24 @@
-package com.eleven.casinobot.context.proxy;
+package com.eleven.casinobot.core.proxy;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Proxy;
 import java.util.function.Consumer;
 
-public class ProxyFactory {
+public final class ProxyFactory {
 
-    public static <T> T newProxy(Class<? extends T> origin, Class<T> interfaces) {
+    public static <T> T newProxy(Object origin, Class<T> interfaces) {
         return newProxy(origin, interfaces, before -> {}, after -> {});
     }
 
-    public static <T> T newProxy(Class<? extends T> origin, Class<T> interfaces,
+    public static <T> T newProxy(Object origin, Class<T> interfaces,
                                  Consumer<T> before) {
         return newProxy(origin, interfaces, before, after -> {});
     }
 
-    public static <T> T newProxy(Class<? extends T> origin, Class<T> interfaces,
+    public static <T> T newProxy(Object origin, Class<T> interfaces,
                                  Consumer<T> before, Consumer<T> after) {
-        T t;
-        try {
-             t = origin.getConstructor().newInstance();
-        } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-            throw new RuntimeException(e);
-        }
+        T t = interfaces.cast(origin);
         ProxyHandler<T> proxyHandler = proxyHandler(t, before, after);
-        return createProxy(origin, interfaces, proxyHandler);
+        return createProxy(origin.getClass(), interfaces, proxyHandler);
     }
 
     private ProxyFactory() {

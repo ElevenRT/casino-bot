@@ -1,4 +1,4 @@
-package com.eleven.casinobot.context.proxy;
+package com.eleven.casinobot.core.proxy;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;

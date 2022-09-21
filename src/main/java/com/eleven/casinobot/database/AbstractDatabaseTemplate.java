@@ -27,8 +27,8 @@ import java.util.function.Function;
  * @author iqpizza6349
  * @version 1.0.0
  */
-public abstract class DatabaseTemplate<T, K> implements Cloneable {
-    protected static final Logger log = LoggerFactory.getLogger(DatabaseTemplate.class);
+public abstract class AbstractDatabaseTemplate<T, K> implements Cloneable {
+    protected static final Logger log = LoggerFactory.getLogger(AbstractDatabaseTemplate.class);
     private static final ConnectionPool CONNECTION_POOL = ConnectionPool.getInstance(5, 10);
 
     /**
@@ -138,14 +138,14 @@ public abstract class DatabaseTemplate<T, K> implements Cloneable {
     }
 
     /**
-     * save query that use in method {@link DatabaseTemplate#save(T)}
+     * save query that use in method {@link AbstractDatabaseTemplate#save(T)}
      * @param entity target to save
      * @return full raw query from DAO
      */
     protected abstract String saveQuery(T entity);
 
     /**
-     * select query that use in method {@link DatabaseTemplate#selectById(K)}
+     * select query that use in method {@link AbstractDatabaseTemplate#selectById(K)}
      * @param id unique type({@link K}) of returning type({@link T})'s primary key
      * @return raw query String from DAO
      */
@@ -161,7 +161,7 @@ public abstract class DatabaseTemplate<T, K> implements Cloneable {
 
     @Override
     @SuppressWarnings("rawtypes")
-    public final DatabaseTemplate clone() throws CloneNotSupportedException {
-        return (DatabaseTemplate) super.clone();
+    public final AbstractDatabaseTemplate clone() throws CloneNotSupportedException {
+        return (AbstractDatabaseTemplate) super.clone();
     }
 }

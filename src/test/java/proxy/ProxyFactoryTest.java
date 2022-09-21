@@ -1,6 +1,6 @@
 package proxy;
 
-import com.eleven.casinobot.context.proxy.ProxyFactory;
+import com.eleven.casinobot.core.proxy.ProxyFactory;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -21,7 +21,7 @@ public class ProxyFactoryTest {
     @Test
     public void proxyTest() {
         // when
-        IStringTest stringTest = ProxyFactory.newProxy(StringTest.class, IStringTest.class);
+        IStringTest stringTest = ProxyFactory.newProxy(new StringTest(), IStringTest.class);
 
         // then
         assertThat(stringTest).isNotNull();
@@ -32,7 +32,7 @@ public class ProxyFactoryTest {
     public void proxyBeforeTest() {
         // when
         IStringTest stringTest = ProxyFactory.newProxy(
-                StringTest.class, IStringTest.class,
+                new StringTest(), IStringTest.class,
                 System.out::println
         );
 
@@ -45,7 +45,7 @@ public class ProxyFactoryTest {
     public void proxyAfterTest() {
         // when
         IStringTest stringTest = ProxyFactory.newProxy(
-                StringTest.class, IStringTest.class,
+                new StringTest(), IStringTest.class,
                 iStringTest -> System.out.println("before"),
                 iStringTest -> System.out.println("after")
         );

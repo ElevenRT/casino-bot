@@ -3,7 +3,7 @@ package com.eleven.casinobot.database.container;
 import com.eleven.casinobot.config.scanner.ReflectionScanner;
 import com.eleven.casinobot.database.annotations.Database;
 import com.eleven.casinobot.config.AppConfig;
-import com.eleven.casinobot.database.DatabaseTemplate;
+import com.eleven.casinobot.database.AbstractDatabaseTemplate;
 import org.reflections.Reflections;
 
 import java.lang.reflect.InvocationTargetException;
@@ -15,12 +15,12 @@ import java.util.Set;
  * Look for existing database templates through reflection,
  * Class to manage database templates created
  * by a single tone pattern
- * @see DatabaseTemplate
+ * @see AbstractDatabaseTemplate
  */
 @SuppressWarnings("rawtypes")
 public final class ContainerPool {
 
-    private final Map<String, DatabaseTemplate> databaseTemplateContainer;
+    private final Map<String, AbstractDatabaseTemplate> databaseTemplateContainer;
 
     private static ContainerPool containerPool;
 
@@ -52,20 +52,20 @@ public final class ContainerPool {
         databaseTemplateContainer.putAll(findDataTemplates());
     }
 
-    private Map<String, DatabaseTemplate> findDataTemplates()
+    private Map<String, AbstractDatabaseTemplate> findDataTemplates()
             throws InvocationTargetException, NoSuchMethodException,
             InstantiationException, IllegalAccessException {
         Reflections reflections = new Reflections(
                 AppConfig.getRootPackage(),
                 new ReflectionScanner()
         );
-        Set<Class<? extends DatabaseTemplate>> templates
-                = reflections.getSubTypesOf(DatabaseTemplate.class);
-        Map<String, DatabaseTemplate> databaseTemplates = new HashMap<>();
+        Set<Class<? extends AbstractDatabaseTemplate>> templates
+                = reflections.getSubTypesOf(AbstractDatabaseTemplate.class);
+        Map<String, AbstractDatabaseTemplate> databaseTemplates = new HashMap<>();
 
-        for (Class<? extends DatabaseTemplate> clazz : templates) {
+        for (Class<? extends AbstractDatabaseTemplate> clazz : templates) {
             if (clazz.isAnnotationPresent(Database.class)) {
-                DatabaseTemplate template = clazz.getConstructor().newInstance();
+                AbstractDatabaseTemplate template = clazz.getConstructor().newInstance();
 
                 String simpleName = clazz.getSimpleName();
                 if (databaseTemplates.get(simpleName) != null) {
@@ -83,12 +83,12 @@ public final class ContainerPool {
      * returns singleton database templates
      * @return deep copy all singleton database templates
      * @throws CloneNotSupportedException if implement of
-     * {@link DatabaseTemplate} class is not cloneable.
+     * {@link AbstractDatabaseTemplate} class is not cloneable.
      */
-    public Map<String, DatabaseTemplate> getDatabaseTemplateContainer()
+    public Map<String, AbstractDatabaseTemplate> getDatabaseTemplateContainer()
             throws CloneNotSupportedException {
-        Map<String, DatabaseTemplate> databaseTemplates = new HashMap<>();
-        for (Map.Entry<String, DatabaseTemplate> templateEntry
+        Map<String, AbstractDatabaseTemplate> databaseTemplates = new HashMap<>();
+        for (Map.Entry<String, AbstractDatabaseTemplate> templateEntry
                 : databaseTemplateContainer.entrySet()) {
             databaseTemplates.put(templateEntry.getKey(), templateEntry.getValue().clone());
         }
@@ -96,15 +96,15 @@ public final class ContainerPool {
     }
 
     /**
-     * Import a single-toned database template using the name of the database template.
+     * Import a single-toned database template using the value of the database template.
      * @return single-toned database template
      */
-    public DatabaseTemplate getDatabaseTemplate(String name) throws CloneNotSupportedException {
-        DatabaseTemplate databaseTemplate = databaseTemplateContainer.get(name);
-        if (databaseTemplate == null) {
+    public AbstractDatabaseTemplate getDatabaseTemplate(String name) throws CloneNotSupportedException {
+        AbstractDatabaseTemplate abstractDatabaseTemplate = databaseTemplateContainer.get(name);
+        if (abstractDatabaseTemplate == null) {
             throw new TemplateNotDefinedException(name);
         }
 
-        return databaseTemplate.clone();
+        return abstractDatabaseTemplate.clone();
     }
 }
