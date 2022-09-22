@@ -186,5 +186,5 @@ gradle-app.setting
 *.hprof
 
 ### Private Data ###
-application.yml
+src/main/resources/application.yml
 schema.sql

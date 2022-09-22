@@ -1,7 +1,7 @@
-package proxy;
+package context;
 
 import com.eleven.casinobot.config.DatabaseConfig;
-import com.eleven.casinobot.database.DatabaseTemplate;
+import com.eleven.casinobot.database.AbstractDatabaseTemplate;
 import com.eleven.casinobot.database.container.ContainerPool;
 import com.eleven.casinobot.mapper.member.Member;
 import org.junit.jupiter.api.Test;
@@ -16,7 +16,7 @@ public class ContainerPoolTest {
     @Test
     public void findTemplateAndSaveTest() throws CloneNotSupportedException {
         // given
-        Map<String, DatabaseTemplate> databaseTemplateSet = ContainerPool.getInstance()
+        Map<String, AbstractDatabaseTemplate> databaseTemplateSet = ContainerPool.getInstance()
                 .getDatabaseTemplateContainer();
 
         // when
@@ -29,12 +29,12 @@ public class ContainerPoolTest {
     public void proxySaveTest() throws CloneNotSupportedException {
         // given
         DatabaseConfig.initalizeDatabase();
-        Map<String, DatabaseTemplate> databaseTemplates = ContainerPool.getInstance()
+        Map<String, AbstractDatabaseTemplate> databaseTemplates = ContainerPool.getInstance()
                 .getDatabaseTemplateContainer();
         Member member = Member.builder().build();
 
         // when
-        for (Map.Entry<String, DatabaseTemplate> templateEntry
+        for (Map.Entry<String, AbstractDatabaseTemplate> templateEntry
                 : databaseTemplates.entrySet()) {
             String proxyName = templateEntry.getKey();
             if (proxyName.equals("MemberDAO")) {

@@ -12,6 +12,6 @@ public final class TemplateAlreadyExistsException extends RuntimeException {
     private static final long serialVersionUID = 1662884804804L;
 
     public TemplateAlreadyExistsException() {
-        super("A database template with the same name already exists.");
+        super("A database template with the same value already exists.");
     }
 }

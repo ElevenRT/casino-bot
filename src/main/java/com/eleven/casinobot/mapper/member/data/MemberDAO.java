@@ -1,25 +1,26 @@
 package com.eleven.casinobot.mapper.member.data;
 
 import com.eleven.casinobot.database.annotations.Database;
-import com.eleven.casinobot.database.DatabaseTemplate;
+import com.eleven.casinobot.database.AbstractDatabaseTemplate;
 import com.eleven.casinobot.mapper.member.Member;
 import com.eleven.casinobot.mapper.member.MemberType;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.util.Optional;
 
 /**
  * The member database management class that inherited the database template class.
  * Refer to the member table to forward various queries, generate results with the mapper class
- * @see DatabaseTemplate
+ * @see AbstractDatabaseTemplate
  * @see Database
  *
  * @author iqpizza6349
  * @version 1.0.0
  */
 @Database
-public class MemberDAO extends DatabaseTemplate<Member, Long> {
+public class MemberDAO extends AbstractDatabaseTemplate<Member, Long> {
 
     @Override
     protected String saveQuery(Member entity) {
@@ -41,7 +42,7 @@ public class MemberDAO extends DatabaseTemplate<Member, Long> {
     }
 
     @Override
-    protected Member result(ResultSet resultSet) throws SQLException {
+    protected Optional<Member> result(ResultSet resultSet) throws SQLException {
         Member member = null;
         while (resultSet.next()) {
             member = Member.builder()
@@ -53,6 +54,6 @@ public class MemberDAO extends DatabaseTemplate<Member, Long> {
                     .broken(resultSet.getBoolean("broken"))
                     .build();
         }
-        return member;
+        return Optional.ofNullable(member);
     }
 }

@@ -1,7 +1,9 @@
 package com.eleven.casinobot.config;
 
+import com.eleven.casinobot.core.annotations.Command;
+import com.eleven.casinobot.core.command.CommandManager;
 import com.eleven.casinobot.event.ReadyListener;
-import com.eleven.casinobot.event.context.EventContextSingleton;
+import com.eleven.casinobot.core.context.ComponentContextSingleton;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
@@ -42,16 +44,29 @@ public final class BotConfig {
     }
 
     private static JDA initializeEventHandlers(JDA jda) throws IllegalAccessException {
-        Set<?> eventListener = getEventHandlers();
+        Set<Object> eventListener = getEventHandlers();
         for (Object listener : eventListener) {
             log.info("add event listener: {}", listener.getClass().getSimpleName());
             jda.addEventListener(listener);
         }
 
+        return initializeCommands(jda);
+    }
+
+    private static JDA initializeCommands(JDA jda) {
+        Set<Command> commands = getCommands();
+        for (Command command : commands) {
+            jda.upsertCommand(command.value(), command.description()).queue();
+        }
+
         return jda;
     }
 
-    private static Set<?> getEventHandlers() throws IllegalAccessException {
-        return EventContextSingleton.getInstance().getAllEventHandler();
+    private static Set<Object> getEventHandlers() throws IllegalAccessException {
+        return ComponentContextSingleton.getInstance().getAllEventHandler();
+    }
+
+    private static Set<Command> getCommands() {
+        return CommandManager.commandValues();
     }
 }

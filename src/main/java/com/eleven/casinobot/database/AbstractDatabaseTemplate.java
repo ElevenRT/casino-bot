@@ -10,6 +10,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Formatter;
+import java.util.Optional;
 import java.util.function.Function;
 
 /**
@@ -26,16 +27,16 @@ import java.util.function.Function;
  * @author iqpizza6349
  * @version 1.0.0
  */
-public abstract class DatabaseTemplate<T, K> implements Cloneable {
-    protected static final Logger log = LoggerFactory.getLogger(DatabaseTemplate.class);
-    private static final ConnectionPool CONNECTION_POOL = ConnectionPool.getInstance(5, 100);
+public abstract class AbstractDatabaseTemplate<T, K> implements Cloneable {
+    protected static final Logger log = LoggerFactory.getLogger(AbstractDatabaseTemplate.class);
+    private static final ConnectionPool CONNECTION_POOL = ConnectionPool.getInstance(5, 10);
 
     /**
      * select type with unique type
      * @param id unique type such as Integer
      * @return select type's primary key is same as {@link K}
      */
-    public final T selectById(K id) {
+    public final Optional<T> selectById(K id) {
         Connection connection = null;
         final String sql = selectByIdQuery(id);
         try {
@@ -137,14 +138,14 @@ public abstract class DatabaseTemplate<T, K> implements Cloneable {
     }
 
     /**
-     * save query that use in method {@link DatabaseTemplate#save(T)}
+     * save query that use in method {@link AbstractDatabaseTemplate#save(T)}
      * @param entity target to save
      * @return full raw query from DAO
      */
     protected abstract String saveQuery(T entity);
 
     /**
-     * select query that use in method {@link DatabaseTemplate#selectById(K)}
+     * select query that use in method {@link AbstractDatabaseTemplate#selectById(K)}
      * @param id unique type({@link K}) of returning type({@link T})'s primary key
      * @return raw query String from DAO
      */
@@ -156,11 +157,11 @@ public abstract class DatabaseTemplate<T, K> implements Cloneable {
      * @return mapper (same as {@link T})
      * @throws SQLException caused when {@link ResultSet#next()} method has invoked
      */
-    protected abstract T result(ResultSet resultSet) throws SQLException;
+    protected abstract Optional<T> result(ResultSet resultSet) throws SQLException;
 
     @Override
     @SuppressWarnings("rawtypes")
-    public DatabaseTemplate clone() throws CloneNotSupportedException {
-        return (DatabaseTemplate) super.clone();
+    public final AbstractDatabaseTemplate clone() throws CloneNotSupportedException {
+        return (AbstractDatabaseTemplate) super.clone();
     }
 }
