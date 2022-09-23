@@ -148,8 +148,11 @@ public final class ConnectionPool {
 
     private void closePool(List<Connection> pool) {
         for (int i = 0; i < pool.size(); i++) {
-            Connection connection0 = free.get(i);
+            Connection connection0 = pool.get(i);
             pool.remove(i--);
+            if (connection0 == null) {
+                continue;
+            }
             try {
                 connection0.close();
             } catch (SQLException e) {
