@@ -46,21 +46,64 @@ public final class AppConfig {
             Map<String, Object> databaseProperties = (Map<String, Object>) properties.get("database");
             @SuppressWarnings("unchecked")
             Map<String, Object> rootPackageProperties = (Map<String, Object>) data.get("code");
-            TOKEN = removeBrace((String) properties.get("token"));
+            String token = removeBrace((String) properties.get("token"));
+            if (isSystemProperty(token)) {
+                TOKEN = getSystemProperty(token);
+            }
+            else {
+                TOKEN = token;
+            }
             log.debug("token: {}", TOKEN);
-            DB_URL = removeBrace((String) databaseProperties.get("url"));
+
+            String url = removeBrace((String) databaseProperties.get("url"));
+            if (isSystemProperty(url)) {
+                DB_URL = getSystemProperty(url);
+            }
+            else {
+                DB_URL = url;
+            }
             log.debug("database url: {}", DB_URL);
-            DB_USERNAME = removeBrace((String) databaseProperties.get("username"));
+
+            String username = removeBrace((String) databaseProperties.get("username"));
+            if (isSystemProperty(username)) {
+                DB_USERNAME = getSystemProperty(username);
+            }
+            else {
+                DB_USERNAME = username;
+            }
             log.debug("username: {}", DB_USERNAME);
-            DB_PASSWORD = removeBrace((String) databaseProperties.get("password"));
+
+            String password = removeBrace((String) databaseProperties.get("password"));
+            if (isSystemProperty(password)) {
+                DB_PASSWORD = getSystemProperty(username);
+            }
+            else {
+                DB_PASSWORD = username;
+            }
             log.debug("password: {}", DB_PASSWORD);
+
             USE_DDL = Boolean.parseBoolean(databaseProperties.get("use-ddl").toString());
             log.debug("use ddl: {}", USE_DDL);
-            ROOT_PACKAGE = removeBrace((String) rootPackageProperties.get("package"));
+
+            String rootPackage = removeBrace((String) rootPackageProperties.get("package"));
+            if (isSystemProperty(rootPackage)) {
+                ROOT_PACKAGE = getSystemProperty(rootPackage);
+            }
+            else {
+                ROOT_PACKAGE = rootPackage;
+            }
             log.debug("root_package: {}", ROOT_PACKAGE);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private static boolean isSystemProperty(String propertyName) {
+        return propertyName.startsWith("$");
+    }
+
+    private static String getSystemProperty(String propertyName) {
+        return System.getenv(propertyName.replace("$", ""));
     }
 
     private AppConfig() {
