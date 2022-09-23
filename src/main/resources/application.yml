@@ -1,0 +1,10 @@
+bot:
+  token: ${TOKEN}
+  database:
+    url: ${JDBC_URL}
+    username: ${USERNAME}
+    password: ${PASSWORD}
+    use-ddl: true
+
+code:
+  package: ${BASE_PACKAGE}
