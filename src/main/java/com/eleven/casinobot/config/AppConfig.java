@@ -75,10 +75,10 @@ public final class AppConfig {
 
             String password = removeBrace((String) databaseProperties.get("password"));
             if (isSystemProperty(password)) {
-                DB_PASSWORD = getSystemProperty(username);
+                DB_PASSWORD = getSystemProperty(password);
             }
             else {
-                DB_PASSWORD = username;
+                DB_PASSWORD = password;
             }
             log.debug("password: {}", DB_PASSWORD);
 
