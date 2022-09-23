@@ -1,6 +1,6 @@
 package dependency;
 
-import com.eleven.casinobot.event.context.EventContext;
+import com.eleven.casinobot.core.context.ComponentContext;
 import com.eleven.casinobot.event.test.TestListener;
 import org.junit.jupiter.api.Test;
 
@@ -11,11 +11,11 @@ public class ContextDependencyTest {
     @Test
     public void constructorInjectionTest() throws Exception {
         // given
-        EventContext eventContext = new EventContext(true);
+        ComponentContext componentContext = new ComponentContext(true);
 
         // when
         @SuppressWarnings("deprecation")
-        TestListener testListener = eventContext.getInstance(TestListener.class);
+        TestListener testListener = componentContext.getInstance(TestListener.class);
 
         // then
         assertThat(testListener).isNotNull();

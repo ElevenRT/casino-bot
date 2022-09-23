@@ -1,5 +1,7 @@
-package com.eleven.casinobot.event.annotations;
+package com.eleven.casinobot.core.annotations;
 
+import com.eleven.casinobot.core.command.ICommand;
+import com.eleven.casinobot.database.AbstractDatabaseTemplate;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 import java.lang.annotation.ElementType;
@@ -12,13 +14,15 @@ import java.lang.annotation.Target;
  * classes that inherit each event listener into the event context,
  * supporting database templates with constructor injection.
  *
- * @see com.eleven.casinobot.database.DatabaseTemplate
+ * @see AbstractDatabaseTemplate
  * @see java.lang.annotation.Annotation
  * @see ListenerAdapter
  * @author iqpizza6349
  * @version 1.0.0
  */
+@Component
 @Target(ElementType.TYPE)
-@Retention(RetentionPolicy.CLASS)
+@Retention(RetentionPolicy.RUNTIME)
 public @interface EventHandler {
+    Class<? extends ICommand>[] commands() default {};
 }

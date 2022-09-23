@@ -1,6 +1,6 @@
 package com.eleven.casinobot.event.member;
 
-import com.eleven.casinobot.event.annotations.EventHandler;
+import com.eleven.casinobot.core.annotations.EventHandler;
 import com.eleven.casinobot.mapper.member.Member;
 import com.eleven.casinobot.mapper.member.data.MemberDAO;
 import net.dv8tion.jda.api.entities.User;
@@ -24,6 +24,7 @@ public class MemberLogger extends ListenerAdapter {
 
     @Override
     public void onMessageReceived(@NotNull MessageReceivedEvent event) {
+        log.info("received");
         User author = event.getAuthor();
         if (author.isBot() || author.isSystem()) {
             return;

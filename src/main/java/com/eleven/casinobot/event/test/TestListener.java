@@ -1,10 +1,10 @@
 package com.eleven.casinobot.event.test;
 
-import com.eleven.casinobot.database.DatabaseTemplate;
-import com.eleven.casinobot.event.annotations.Injection;
+import com.eleven.casinobot.database.AbstractDatabaseTemplate;
+import com.eleven.casinobot.core.annotations.Injection;
 import com.eleven.casinobot.mapper.member.Member;
 import com.eleven.casinobot.mapper.member.data.MemberDAO;
-import com.eleven.casinobot.event.annotations.EventHandler;
+import com.eleven.casinobot.core.annotations.EventHandler;
 
 /**
  * do not use in real
@@ -25,7 +25,7 @@ public class TestListener {
         this.memberDAO = memberDAO;
     }
 
-    public DatabaseTemplate<Member, Long> getMemberDAO() {
+    public AbstractDatabaseTemplate<Member, Long> getMemberDAO() {
         return memberDAO;
     }
 

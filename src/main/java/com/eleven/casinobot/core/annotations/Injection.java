@@ -1,4 +1,6 @@
-package com.eleven.casinobot.event.annotations;
+package com.eleven.casinobot.core.annotations;
+
+import com.eleven.casinobot.database.AbstractDatabaseTemplate;
 
 import java.lang.annotation.*;
 
@@ -8,7 +10,7 @@ import java.lang.annotation.*;
  * Currently, it has been defined as a principle to inject the constructor.
  * It left the constructor for use when it was difficult to make.
  *
- * @see com.eleven.casinobot.database.DatabaseTemplate
+ * @see AbstractDatabaseTemplate
  * @see java.lang.annotation.Annotation
  * @author iqpizza6349
  * @version 1.0.0
