@@ -41,7 +41,7 @@ public final class CommandManager {
      * @param ctx Occurred Event
      * @see CommandContext
      */
-    public static void invoke(Object caller, final String value, CommandContext ctx) {
+    public static void invoke(Object caller, final String value, ICommandContext ctx) {
         Class<?> callerClass = caller.getClass();
         load(callerClass);
         invokeCommand(callerClass, value, ctx);
@@ -78,7 +78,7 @@ public final class CommandManager {
     }
 
     private static void invokeCommand(Class<?> caller, String value,
-                                      CommandContext ctx) {
+                                      ICommandContext ctx) {
         Set<ICommand> commands = listenerCommands.getOrDefault(caller, new HashSet<>());
         for (ICommand command : commands) {
             Command cmd = command.getClass().getAnnotation(Command.class);

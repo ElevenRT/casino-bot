@@ -1,10 +1,7 @@
 package com.eleven.casinobot.core.context;
 
-import com.eleven.casinobot.core.annotations.Component;
-import com.eleven.casinobot.core.annotations.EventHandler;
-import com.eleven.casinobot.core.annotations.Injection;
+import com.eleven.casinobot.core.annotations.*;
 import com.eleven.casinobot.config.AppConfig;
-import com.eleven.casinobot.core.annotations.Command;
 import com.eleven.casinobot.core.util.Utils;
 import com.eleven.casinobot.database.AbstractDatabaseTemplate;
 import com.eleven.casinobot.database.container.TemplateNotDefinedException;
@@ -90,6 +87,23 @@ public final class ComponentContext {
 
     public Map<Class<?>, ?> getAllCommands() throws IllegalAccessException {
         return getContext(Command.class, new HashSet<>());
+    }
+
+    public Map<String, Set<String>> getAllGameInfos() throws IllegalAccessException {
+        Map<Class<?>, ?> commands = getAllCommands();
+        Map<String, Set<String>> games = new HashMap<>();
+        for (Map.Entry<Class<?>, ?> command : commands.entrySet()) {
+            Command cmd = command.getKey().getAnnotation(Command.class);
+            CommandDetail detail = cmd.detail();
+            if ((detail.commandType() == CommandDetail.Type.COMMAND)
+                    || (games.containsKey(detail.gameType()))
+                    || (detail.interactionIds().length == 0)) {
+                continue;
+            }
+
+            games.put(detail.gameType(), Set.of(detail.interactionIds()));
+        }
+        return games;
     }
 
     private Map<Class<?>, Object> getContext(Class<? extends Annotation> annotation,

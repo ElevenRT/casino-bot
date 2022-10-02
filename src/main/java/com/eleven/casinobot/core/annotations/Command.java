@@ -29,4 +29,6 @@ public @interface Command {
      * @return description of the command
      */
     String description();
+
+    CommandDetail detail() default @CommandDetail;
 }

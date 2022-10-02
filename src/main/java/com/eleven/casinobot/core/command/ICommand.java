@@ -15,5 +15,5 @@ public interface ICommand {
      * method where the ability to perform commands should be implemented
      * @param ctx Information about the event that occurred and its associated information
      */
-    void onEvent(CommandContext ctx);
+    void onEvent(ICommandContext ctx);
 }

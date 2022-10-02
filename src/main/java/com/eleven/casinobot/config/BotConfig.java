@@ -2,11 +2,13 @@ package com.eleven.casinobot.config;
 
 import com.eleven.casinobot.core.annotations.Command;
 import com.eleven.casinobot.core.command.CommandManager;
+import com.eleven.casinobot.core.game.GameManager;
 import com.eleven.casinobot.event.ReadyListener;
 import com.eleven.casinobot.core.context.ComponentContextSingleton;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
+import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.Compression;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
 import org.slf4j.Logger;
@@ -35,6 +37,7 @@ public final class BotConfig {
         JDABuilder builder = JDABuilder.createDefault(AppConfig.getToken());
 
         builder.disableCache(CacheFlag.MEMBER_OVERRIDES, CacheFlag.VOICE_STATE);
+        builder.enableIntents(GatewayIntent.MESSAGE_CONTENT);
         builder.setBulkDeleteSplittingEnabled(false);
         builder.setCompression(Compression.NONE);
         builder.setActivity(Activity.playing("카드 재정렬"));
@@ -59,6 +62,7 @@ public final class BotConfig {
             jda.upsertCommand(command.value(), command.description()).queue();
         }
 
+        GameManager.init();
         return jda;
     }
 
