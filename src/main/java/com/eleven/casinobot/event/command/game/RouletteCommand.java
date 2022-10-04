@@ -2,9 +2,8 @@ package com.eleven.casinobot.event.command.game;
 
 import com.eleven.casinobot.core.annotations.Command;
 import com.eleven.casinobot.core.annotations.CommandDetail;
-import com.eleven.casinobot.core.command.ICommand;
-import com.eleven.casinobot.core.command.ICommandContext;
-import com.eleven.casinobot.core.game.IGameContext;
+import com.eleven.casinobot.core.interaction.command.ICommand;
+import com.eleven.casinobot.core.interaction.command.ICommandContext;
 import net.dv8tion.jda.api.entities.emoji.Emoji;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
@@ -21,9 +20,7 @@ public class RouletteCommand implements ICommand {
 
     @Override
     public void onEvent(ICommandContext ctx) {
-        IGameContext context = (IGameContext) ctx;
-        SlashCommandInteractionEvent event = context.getEvent();
-
+        SlashCommandInteractionEvent event = ctx.getEvent();
         event.reply("roulette").setEphemeral(false)
                 .addActionRow(
                         Button.primary("roulette_join", Emoji.fromUnicode("U+2714")),

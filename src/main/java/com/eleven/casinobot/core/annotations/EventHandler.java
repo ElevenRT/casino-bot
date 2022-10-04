@@ -1,6 +1,6 @@
 package com.eleven.casinobot.core.annotations;
 
-import com.eleven.casinobot.core.command.ICommand;
+import com.eleven.casinobot.core.interaction.command.ICommand;
 import com.eleven.casinobot.database.AbstractDatabaseTemplate;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 

@@ -1,4 +1,4 @@
-package com.eleven.casinobot.core.game;
+package com.eleven.casinobot.core.interaction.button;
 
 import com.eleven.casinobot.core.context.ComponentContextSingleton;
 import net.dv8tion.jda.api.entities.Guild;
@@ -10,7 +10,7 @@ import net.dv8tion.jda.api.interactions.components.buttons.Button;
 
 import java.util.*;
 
-public final class GameManager {
+public final class ButtonInteraction {
     private static final Map<Long, String> GAME_PLAYERS = new HashMap<>();
     private static final Map<String, Set<String>> GAME_TYPES_IDS = new HashMap<>();
     private static final Map<Guild, Map<String, State>> GUILD_GAMES = new HashMap<>();
@@ -27,7 +27,7 @@ public final class GameManager {
         System.out.println(GAME_TYPES_IDS);
     }
 
-    private GameManager() {}
+    private ButtonInteraction() {}
 
     public static void init() {
         // Nothing .

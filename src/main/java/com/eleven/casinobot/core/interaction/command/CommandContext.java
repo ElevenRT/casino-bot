@@ -1,4 +1,4 @@
-package com.eleven.casinobot.core.command;
+package com.eleven.casinobot.core.interaction.command;
 
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;

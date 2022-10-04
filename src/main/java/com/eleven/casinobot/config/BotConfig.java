@@ -1,8 +1,8 @@
 package com.eleven.casinobot.config;
 
 import com.eleven.casinobot.core.annotations.Command;
-import com.eleven.casinobot.core.command.CommandManager;
-import com.eleven.casinobot.core.game.GameManager;
+import com.eleven.casinobot.core.interaction.command.CommandManager;
+import com.eleven.casinobot.core.interaction.button.ButtonInteraction;
 import com.eleven.casinobot.event.ReadyListener;
 import com.eleven.casinobot.core.context.ComponentContextSingleton;
 import net.dv8tion.jda.api.JDA;
@@ -62,7 +62,7 @@ public final class BotConfig {
             jda.upsertCommand(command.value(), command.description()).queue();
         }
 
-        GameManager.init();
+        ButtonInteraction.init();
         return jda;
     }
 

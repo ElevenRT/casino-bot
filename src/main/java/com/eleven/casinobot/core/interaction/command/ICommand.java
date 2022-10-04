@@ -1,4 +1,4 @@
-package com.eleven.casinobot.core.command;
+package com.eleven.casinobot.core.interaction.command;
 
 /**
  * The ICommand interface is the interface that each command class must implement.

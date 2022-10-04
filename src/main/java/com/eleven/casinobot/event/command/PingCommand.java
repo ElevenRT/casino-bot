@@ -1,8 +1,8 @@
 package com.eleven.casinobot.event.command;
 
 import com.eleven.casinobot.core.annotations.Command;
-import com.eleven.casinobot.core.command.ICommand;
-import com.eleven.casinobot.core.command.ICommandContext;
+import com.eleven.casinobot.core.interaction.command.ICommand;
+import com.eleven.casinobot.core.interaction.command.ICommandContext;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
 @Command(value = "ping", description = "Calculate ping of the Bot")

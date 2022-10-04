@@ -1,4 +1,4 @@
-package com.eleven.casinobot.core.command;
+package com.eleven.casinobot.core.interaction.command;
 
 import com.eleven.casinobot.core.annotations.Command;
 import com.eleven.casinobot.core.annotations.EventHandler;

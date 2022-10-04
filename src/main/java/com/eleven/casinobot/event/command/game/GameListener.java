@@ -1,9 +1,9 @@
 package com.eleven.casinobot.event.command.game;
 
 import com.eleven.casinobot.core.annotations.EventHandler;
-import com.eleven.casinobot.core.command.CommandManager;
-import com.eleven.casinobot.core.game.GameContext;
-import com.eleven.casinobot.core.game.GameManager;
+import com.eleven.casinobot.core.interaction.command.CommandContext;
+import com.eleven.casinobot.core.interaction.command.CommandManager;
+import com.eleven.casinobot.core.interaction.button.ButtonInteraction;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
@@ -16,12 +16,11 @@ public class GameListener extends ListenerAdapter {
     @Override
     public void onSlashCommandInteraction(@NotNull
                                               SlashCommandInteractionEvent event) {
-        CommandManager.invoke(this, event.getName(),
-                new GameContext(event, event.getName()));
+        CommandManager.invoke(this, event.getName(), new CommandContext(event));
     }
 
     @Override
     public void onButtonInteraction(@NotNull ButtonInteractionEvent event) {
-        GameManager.invokeInteraction(event);
+        ButtonInteraction.invokeInteraction(event);
     }
 }
