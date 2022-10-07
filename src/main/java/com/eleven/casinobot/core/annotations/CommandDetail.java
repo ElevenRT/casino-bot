@@ -18,7 +18,7 @@ public @interface CommandDetail {
 
     String gameType() default "";
 
-    String[] interactionIds() default {};
+    String interactionId() default "";
 
     enum Type {
         /**

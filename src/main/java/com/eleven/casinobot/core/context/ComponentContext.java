@@ -2,6 +2,7 @@ package com.eleven.casinobot.core.context;
 
 import com.eleven.casinobot.core.annotations.*;
 import com.eleven.casinobot.config.AppConfig;
+import com.eleven.casinobot.core.interaction.component.button.IButtonInteraction;
 import com.eleven.casinobot.core.util.Utils;
 import com.eleven.casinobot.database.AbstractDatabaseTemplate;
 import com.eleven.casinobot.database.container.TemplateNotDefinedException;
@@ -85,34 +86,73 @@ public final class ComponentContext {
         return instances;
     }
 
-    public Map<Class<?>, ?> getAllCommands() throws IllegalAccessException {
-        return getContext(Command.class, new HashSet<>());
+    public Map<Class<?>, ?> getAllCommands(Class<?>... interfaces) throws IllegalAccessException {
+        return getContext(Command.class, new HashSet<>(), interfaces);
     }
 
-    public Map<String, Set<String>> getAllGameInfos() throws IllegalAccessException {
+    public Map<String, String> getAllInteractionInfos() throws IllegalAccessException {
         Map<Class<?>, ?> commands = getAllCommands();
-        Map<String, Set<String>> games = new HashMap<>();
+        Map<String, String> interactions = new HashMap<>();
         for (Map.Entry<Class<?>, ?> command : commands.entrySet()) {
             Command cmd = command.getKey().getAnnotation(Command.class);
             CommandDetail detail = cmd.detail();
             if ((detail.commandType() == CommandDetail.Type.COMMAND)
-                    || (games.containsKey(detail.gameType()))
-                    || (detail.interactionIds().length == 0)) {
+                    || (interactions.containsKey(detail.gameType()))
+                    || (detail.interactionId().equals(""))) {
                 continue;
             }
 
-            games.put(detail.gameType(), Set.of(detail.interactionIds()));
+            interactions.put(detail.gameType(), detail.interactionId());
         }
-        return games;
+        return interactions;
+    }
+    
+    public Map<Class<?>, Object> getAllInteractions() throws IllegalAccessException {
+        Map<Class<?>, ?> commands = getAllCommands(IButtonInteraction.class);
+        Map<Class<?>, Object> interactions = new HashMap<>();
+        for (Map.Entry<Class<?>, ?> command : commands.entrySet()) {
+            Command cmd = command.getKey().getAnnotation(Command.class);
+            CommandDetail detail = cmd.detail();
+            if ((detail.commandType() == CommandDetail.Type.COMMAND)
+                    || (detail.interactionId().equals(""))) {
+                continue;
+            }
+
+            interactions.put(command.getKey(), command.getValue());
+        }
+        return interactions;
     }
 
     private Map<Class<?>, Object> getContext(Class<? extends Annotation> annotation,
-                              Collection<Object> instances) throws IllegalAccessException {
+                              Collection<Object> instances, Class<?>... interfaces) throws IllegalAccessException {
         Map<Class<?>, Object> map = new HashMap<>();
         for (Map.Entry<Class<?>, Object> listener : contextRegistry.entrySet()) {
 
-            if (!listener.getKey().isAnnotationPresent(annotation)) {
+            Class<?> clazz = listener.getKey();
+            if (!clazz.isAnnotationPresent(annotation)) {
                 continue;
+            }
+
+            if (interfaces.length != 0 && clazz.getInterfaces().length > 1) {
+                int length = interfaces.length;
+                Class<?>[] classes = clazz.getInterfaces();
+
+                int interfaceCount = 0;
+                for (int l = 0; l < length; l++) {
+                    for (Class<?> c : classes) {
+                        for (Class<?> i : interfaces) {
+                            if (c.equals(i)) {
+                                interfaceCount++;
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                if (interfaceCount < length) {
+                    throw new IllegalArgumentException(String.format("expected interface count: %d, but actually: %d. " +
+                            "exception has happen at %s class", length, interfaceCount, clazz.getSimpleName()));
+                }
             }
 
             Object instance = listener.getValue();

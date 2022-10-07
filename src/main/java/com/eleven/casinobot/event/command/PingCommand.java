@@ -9,7 +9,7 @@ import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEve
 public class PingCommand implements ICommand {
 
     @Override
-    public void onEvent(ICommandContext ctx) {
+    public void onCommandEvent(ICommandContext ctx) {
         SlashCommandInteractionEvent event = ctx.getEvent();
         long time = System.currentTimeMillis();
         event.reply("Pong!").setEphemeral(true)

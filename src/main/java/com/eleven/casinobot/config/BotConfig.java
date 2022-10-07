@@ -2,7 +2,8 @@ package com.eleven.casinobot.config;
 
 import com.eleven.casinobot.core.annotations.Command;
 import com.eleven.casinobot.core.interaction.command.CommandManager;
-import com.eleven.casinobot.core.interaction.button.ButtonInteraction;
+import com.eleven.casinobot.core.interaction.component.button.ButtonInteractionManager;
+import com.eleven.casinobot.core.interaction.component.menu.MenuInteractionManager;
 import com.eleven.casinobot.event.ReadyListener;
 import com.eleven.casinobot.core.context.ComponentContextSingleton;
 import net.dv8tion.jda.api.JDA;
@@ -36,8 +37,15 @@ public final class BotConfig {
     public static JDA initBot() throws LoginException, IllegalAccessException {
         JDABuilder builder = JDABuilder.createDefault(AppConfig.getToken());
 
-        builder.disableCache(CacheFlag.MEMBER_OVERRIDES, CacheFlag.VOICE_STATE);
-        builder.enableIntents(GatewayIntent.MESSAGE_CONTENT);
+        builder.disableCache(CacheFlag.VOICE_STATE);
+        builder.enableIntents(
+                GatewayIntent.GUILD_MESSAGES, GatewayIntent.GUILD_BANS,
+                GatewayIntent.GUILD_EMOJIS_AND_STICKERS, GatewayIntent.GUILD_WEBHOOKS,
+                GatewayIntent.GUILD_PRESENCES, GatewayIntent.GUILD_MESSAGES,
+                GatewayIntent.GUILD_MESSAGE_REACTIONS, GatewayIntent.GUILD_MESSAGE_TYPING,
+                GatewayIntent.DIRECT_MESSAGES, GatewayIntent.DIRECT_MESSAGE_REACTIONS, GatewayIntent.DIRECT_MESSAGE_TYPING,
+                GatewayIntent.MESSAGE_CONTENT
+        );
         builder.setBulkDeleteSplittingEnabled(false);
         builder.setCompression(Compression.NONE);
         builder.setActivity(Activity.playing("카드 재정렬"));
@@ -62,7 +70,8 @@ public final class BotConfig {
             jda.upsertCommand(command.value(), command.description()).queue();
         }
 
-        ButtonInteraction.init();
+        ButtonInteractionManager.init();
+        MenuInteractionManager.init();
         return jda;
     }
 

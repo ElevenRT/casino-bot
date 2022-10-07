@@ -1,6 +1,6 @@
 package com.eleven.casinobot.core.interaction.command;
 
-import com.eleven.casinobot.core.context.IBotContext;
+import com.eleven.casinobot.core.interaction.IBotContext;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
 /**

@@ -83,7 +83,7 @@ public final class CommandManager {
         for (ICommand command : commands) {
             Command cmd = command.getClass().getAnnotation(Command.class);
             if (cmd.value().equals(value)) {
-                command.onEvent(ctx);
+                command.onCommandEvent(ctx);
                 break;
             }
         }
