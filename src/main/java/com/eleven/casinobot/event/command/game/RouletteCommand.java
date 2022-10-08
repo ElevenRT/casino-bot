@@ -9,27 +9,19 @@ import com.eleven.casinobot.core.interaction.component.button.IButtonInteraction
 import com.eleven.casinobot.core.interaction.component.button.IButtonComponentContext;
 import com.eleven.casinobot.core.interaction.component.menu.IMenuComponentContext;
 import com.eleven.casinobot.core.interaction.component.menu.IMenuInteraction;
-import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.entities.emoji.Emoji;
 import net.dv8tion.jda.api.entities.emoji.EmojiUnion;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
-import net.dv8tion.jda.api.exceptions.RateLimitedException;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
 import net.dv8tion.jda.api.interactions.components.buttons.ButtonStyle;
 import net.dv8tion.jda.api.interactions.components.selections.SelectMenu;
 import net.dv8tion.jda.api.interactions.components.selections.SelectOption;
-import net.dv8tion.jda.api.utils.FileUpload;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.URL;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @Command(value = "roulette", description = "Casino Queen, Roulette",
         detail =
@@ -40,23 +32,46 @@ import java.util.Set;
         )
 )
 public class RouletteCommand implements ICommand, IButtonInteraction, IMenuInteraction {
-
-    private static final Logger log = LoggerFactory.getLogger(RouletteCommand.class);
-
     private static final String GAME_TYPE = "ROULETTE";
 
     private static final Set<Long> INTERACTIONS = new HashSet<>();
 
-    private static final String ROULETTE_ANIMATION;
+
+    private static final Map<String, String> ROULETTE_DATA = new LinkedHashMap<>();
+    private static final Emoji[] EMOJIS = {
+            Emoji.fromUnicode("U+1F947"), Emoji.fromUnicode("U+1F50D"),
+            Emoji.fromUnicode("U+0023 U+FE0F U+20E3"), Emoji.fromUnicode("U+1F948"),
+            Emoji.fromUnicode("U+2B1B"), Emoji.fromUnicode("U+1F7E5"),
+            Emoji.fromUnicode("U+1F949"), Emoji.fromUnicode("U+002A U+FE0F U+20E3"),
+            Emoji.fromUnicode("U+1F50E"), Emoji.fromUnicode("U+1F3F4"),
+            Emoji.fromUnicode("U+1F3F3"), Emoji.fromUnicode("U+1F3F4 U+200D U+2620 U+FE0F")
+    };
+    private static final List<String> LABELS;
+    private static final Set<SelectOption> SELECT_OPTIONS = new LinkedHashSet<>();
+    private static final Random RANDOM = new Random();
 
     static {
-        ClassLoader classLoader = RouletteCommand.class.getClassLoader();
-        final URL url  = classLoader.getResource("gifs/roulette.gif");
-        if (url == null) {
-            throw new RuntimeException("file not found");
+        ROULETTE_DATA.put("1st", "1st");
+        ROULETTE_DATA.put("1-18", "1to18");
+        ROULETTE_DATA.put("EVEN", "even");
+        ROULETTE_DATA.put("2nd", "2nd");
+        ROULETTE_DATA.put("BLACK", "black");
+        ROULETTE_DATA.put("RED", "red");
+        ROULETTE_DATA.put("3rd", "3rd");
+        ROULETTE_DATA.put("ODD", "odd");
+        ROULETTE_DATA.put("19-36", "19to36");
+        ROULETTE_DATA.put("2 to 1 (1, 4, 7, ...34)", "index1");
+        ROULETTE_DATA.put("2 to 1 (2, 5, 8, ...34)", "index2");
+        ROULETTE_DATA.put("2 to 1 (3, 6, 9, ...34)", "index3");
+        LABELS = new LinkedList<>(ROULETTE_DATA.keySet());
+        Iterator<Map.Entry<String, String>> iterator = ROULETTE_DATA.entrySet().iterator();
+        int i = 0;
+        while (iterator.hasNext()) {
+            Map.Entry<String, String> entry = iterator.next();
+            String key = entry.getKey();
+            String value = entry.getValue();
+            SELECT_OPTIONS.add(SelectOption.of(key, value).withEmoji(EMOJIS[i++]));
         }
-        ROULETTE_ANIMATION = url.getFile().replaceFirst("/", "")
-                .replaceAll("/", "\\\\");
     }
 
     @Override
@@ -85,21 +100,14 @@ public class RouletteCommand implements ICommand, IButtonInteraction, IMenuInter
         assert emoji != null;
         if (emoji.asUnicode().getAsCodepoints().equalsIgnoreCase("U+1F340")) {
             if (INTERACTIONS.containsAll(getInteractioners(ctx.getGuild(), "ROULETTE"))) {
-                File file = new File(ROULETTE_ANIMATION);
-                log.info("{}", file.exists());
-                try {
-                    event.replyFiles(FileUpload.fromData(file)).complete(true);
-                } catch (RateLimitedException e) {
-                    JDA jda = event.getJDA();
-                    jda.shutdownNow();
-                    while (jda.getStatus() != JDA.Status.SHUTDOWN) {
-                        try {
-                            Thread.sleep(20);
-                        } catch (InterruptedException ex) {
-                            throw new RuntimeException(ex);
-                        }
-                    }
-                }
+                EmbedBuilder builder = new EmbedBuilder();
+                event.replyEmbeds(
+                        builder
+                                .setTitle("The ball is thrown. Where will arrive?")
+                                .setThumbnail("https://raw.githubusercontent.com/ElevenRT/images/main/roulette-unscreen%20(1).gif")
+                                .setDescription(String.format("The Ball has arrived in %s", LABELS.get(RANDOM.nextInt(LABELS.size()))))
+                                .build()
+                ).queue();
             }
             else {
                 event.reply("돌아가").queue();
@@ -110,20 +118,7 @@ public class RouletteCommand implements ICommand, IButtonInteraction, IMenuInter
                     .addActionRow(
                             SelectMenu.create(GAME_TYPE + "_TABLE")
                                     .addOption("0", "0", Emoji.fromUnicode("U+0030 U+FE0F U+20E3"))
-                                    .addOptions(
-                                            SelectOption.of("1st", "1st").withEmoji(Emoji.fromUnicode("U+1F947")),
-                                            SelectOption.of("1-18", "1to18").withEmoji(Emoji.fromUnicode("U+1F50D")),
-                                            SelectOption.of("EVEN", "even").withEmoji(Emoji.fromUnicode("U+0023 U+FE0F U+20E3")),
-                                            SelectOption.of("2nd", "2nd").withEmoji(Emoji.fromUnicode("U+1F948")),
-                                            SelectOption.of("BLACK", "black").withEmoji(Emoji.fromUnicode("U+2B1B")),
-                                            SelectOption.of("RED", "red").withEmoji(Emoji.fromUnicode("U+1F7E5")),
-                                            SelectOption.of("3rd", "3rd").withEmoji(Emoji.fromUnicode("U+1F949")),
-                                            SelectOption.of("ODD", "odd").withEmoji(Emoji.fromUnicode("U+002A U+FE0F U+20E3")),
-                                            SelectOption.of("19-36", "19to36").withEmoji(Emoji.fromUnicode("U+1F50E")),
-                                            SelectOption.of("2 to 1 (1, 4, 7, .. 34)", "index1").withEmoji(Emoji.fromUnicode("U+1F3F4")),
-                                            SelectOption.of("2 to 1 (2, 5, 8, .. 35)", "index2").withEmoji(Emoji.fromUnicode("U+1F3F3")),
-                                            SelectOption.of("2 to 1 (3, 6, 9, .. 36)", "index3").withEmoji(Emoji.fromUnicode("U+1F3F4 U+200D U+2620 U+FE0F"))
-                                    ).build()
+                                    .addOptions(SELECT_OPTIONS).build()
                     ).addActionRow(Button.of(ButtonStyle.PRIMARY, GAME_TYPE + "_END", "SEE RESULT", Emoji.fromUnicode("U+1F340")))
                     .queue();
         }
